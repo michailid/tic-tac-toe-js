@@ -10,25 +10,58 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/3bfd3ce9e5.js"
+      crossorigin="anonymous"
+    ></script>
     <title>Vanilla JS Tic Tac Toe</title>
   </head>
   <body>
     <main>
       <div class="grid">
-        <div class="turn"></div>
-        <div class="actions"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="score"></div>
-        <div class="score"></div>
-        <div class="score"></div>
+        <!-- Turn indicator -->
+        <div class="turn">
+          <i class="fa-solid fa-x shadow"></i>
+          <p class="turquoise">Player 1, you're up!</p>
+        </div>
+
+        <!-- Dropdown menu -->
+        <div class="menu">
+          <button class="menu-btn" data-id="menu-button">
+            Actions
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+
+          <div class="items border hidden">
+            <button>Reset</button>
+            <button>New Round</button>
+          </div>
+        </div>
+
+        <!-- Game board -->
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+        <div class="square shadow"></div>
+
+        <!-- Scoreboard -->
+        <div class="score shadow" style="background-color: var(--turquoise)">
+          <p>Player 1</p>
+          <span data-id="p1-wins">0 Wins</span>
+        </div>
+        <div class="score shadow" style="background-color: var(--light-gray)">
+          <p>Ties</p>
+          <span data-id="ties">0</span>
+        </div>
+        <div class="score shadow" style="background-color: var(--yellow)">
+          <p>Player 2</p>
+          <span data-id="p2-wins">0 Wins</span>
+        </div>
       </div>
     </main>
 
@@ -46,5 +79,13 @@
         </a>
       </p>
     </footer>
+
+    <!-- Modal that opens when game ends -->
+    <div class="modal hidden">
+      <div class="modal-contents">
+        <p>Player 1 wins!</p>
+        <button>Play again</button>
+      </div>
+    </div>
   </body>
 </html>
