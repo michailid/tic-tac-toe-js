@@ -1,12 +1,18 @@
+import View from "./view.js";
+
 const App = {
   // All of our selected HTML elements
   $: {
     menu: document.querySelector('[data-id="menu"]'),
     menuItems: document.querySelector('[data-id="menu-items"]'),
     icon: document.querySelector(".menu i"),
-    resetBtn: document.querySelector('[data-id="reset-btn"'),
-    newRoundBtn: document.querySelector('[data-id="new-round-btn"'),
-    squares: document.querySelectorAll('[data-id="square"'),
+    resetBtn: document.querySelector('[data-id="reset-btn"]'),
+    newRoundBtn: document.querySelector('[data-id="new-round-btn"]'),
+    squares: document.querySelectorAll('[data-id="square"]'),
+    modal: document.querySelector('[data-id="modal"]'),
+    modalText: document.querySelector('[data-id="modal-text"]'),
+    modalBtn: document.querySelector('[data-id="modal-btn"]'),
+    turn: document.querySelector('[data-id="turn"]'),
   },
 
   state: {
@@ -90,33 +96,73 @@ const App = {
           App.state.moves.length === 0
             ? 1
             : getOppositePlayer(lastMove.playerId);
+        const nextPlayer = getOppositePlayer(currentPlayer);
 
-        const icon = document.createElement("i");
+        const squareIcon = document.createElement("i");
+        const turnIcon = document.createElement("i");
+        const turnLabel = document.createElement("p");
+        turnLabel.innerText = `Player ${nextPlayer}, you are up!`;
+
         if (currentPlayer === 1) {
-          icon.classList.add("fa-solid", "fa-x", "yellow");
+          squareIcon.classList.add("fa-solid", "fa-x", "yellow");
+          turnIcon.classList.add("fa-solid", "fa-o", "turquoise");
+          turnLabel.classList = "turquoise";
         } else {
-          icon.classList.add("fa-solid", "fa-o", "turquoise");
+          squareIcon.classList.add("fa-solid", "fa-o", "turquoise");
+          turnIcon.classList.add("fa-solid", "fa-x", "yellow");
+          turnLabel.classList = "yellow";
         }
+
+        App.$.turn.replaceChildren(turnIcon, turnLabel);
 
         App.state.moves.push({
           squareId: +square.id,
           playerId: currentPlayer,
         });
-        console.log(App.state);
-        square.replaceChildren(icon);
+        square.replaceChildren(squareIcon);
 
         // Check if there is a winner or tie game
         const game = App.getGameStatus(App.state.moves);
         if (game.status === "complete") {
+          App.$.modal.classList.remove("hidden");
+
+          let message = "";
           if (game.winner) {
-            alert(`Player ${game.winner} wins!`);
+            message = `Player ${game.winner} wins!`;
           } else {
-            alert("Tie!");
+            message = "Tie game!";
           }
+          App.$.modalText.textContent = message;
         }
       });
+    });
+
+    App.$.modalBtn.addEventListener("click", (event) => {
+      // reset game
+      App.state.moves = [];
+      App.$.squares.forEach((square) => square.replaceChildren());
+      App.$.modal.classList.add("hidden");
     });
   },
 };
 
-window.addEventListener("load", App.init);
+
+function init() {
+  const view = new View();
+
+  view.bindGameResetEvent((event) => {
+    console.log("Reset event");
+    console.log(event);
+  });
+
+  view.bindNewRoundEvent((event) => {
+    console.log("New round event");
+    console.log(event);
+  });
+
+  view.bindPlayerMoveEvent((event) => {
+    view.setTurnIndicator(1);
+  });
+}
+
+window.addEventListener("load", init);
