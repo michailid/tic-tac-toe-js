@@ -166,11 +166,11 @@ function init() {
   const view = new View();
   const store = new Store(players);
 
-  console.log(store.game);
-
   view.bindGameResetEvent((event) => {
-    console.log("Reset event");
-    console.log(event);
+    view.closeAll();
+    store.reset();
+    view.clearMoves();
+    view.setTurnIndicator(store.game.currentPlayer);
   });
 
   view.bindNewRoundEvent((event) => {
@@ -196,7 +196,7 @@ function init() {
       view.openModal(
         store.game.status.winner
           ? `${store.game.status.winner.name} wins!`
-          : "Tie!"
+          : "Tie!",
       );
 
       return;
